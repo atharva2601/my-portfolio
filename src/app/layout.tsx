@@ -1,24 +1,19 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import type { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
-  title: "Atharva Patel | Full-Stack Elegance",
-  description: "Crafting modern applications with meticulous attention to detail.",
+  title: "Atharva — Portfolio",
+  description: "Apple-style portfolio built with Next.js",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="!scroll-smooth">
-      {/* The <body> tag is now correctly styled for dark mode */}
-      <body className={`${inter.className} bg-white dark:bg-black transition-colors duration-300`}>
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className="min-h-screen bg-white text-black dark:bg-neutral-950 dark:text-white antialiased">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,32 +1,18 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* src/app/globals.css */
+@import "tailwindcss";
+*{scroll-behavior:smooth}
+::selection{background:#c7d2fe;color:#111827}
+@keyframes marquee_x{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.marquee{animation:marquee_x 40s linear infinite}
 
-:root {
-  --color-text-dark: #1D1D1F;
-  --color-background-light: #F5F5F7;
-  --color-accent: #0070c9;
-}
+/* Optional subtle floating for logos (apply via class 'animate-float') */
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.animate-float{animation:float 4s ease-in-out infinite}
 
-body {
-  color: var(--color-text-dark);
-  background-color: white;
-}
-.dark body {
-  background-color: black;
-}
-
-/* Custom Swiper Styles */
-.swiper-button-next,
-.swiper-button-prev {
-  color: #fff;
-  background-color: rgba(0, 0, 0, 0.3);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  transition: background-color 0.3s;
-}
-.swiper-button-next:hover,
-.swiper-button-prev:hover {
-  background-color: rgba(0, 0, 0, 0.5);
+@keyframes sheen { 0%{transform:translateX(-120%)} 100%{transform:translateX(120%)} }
+.sheen{position:relative}
+.sheen::before{
+  content:""; position:absolute; top:-1px; bottom:-1px; left:-30%; width:30%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,.25),transparent);
+  filter:blur(6px); transform:translateX(-120%); animation:sheen 3s linear infinite;
 }

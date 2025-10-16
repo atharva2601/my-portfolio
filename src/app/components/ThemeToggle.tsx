@@ -1,30 +1,25 @@
 "use client";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import { Sun, Moon } from "lucide-react";
 
-import { useState, useEffect } from 'react';
+export default function ThemeToggle() {
+  const { theme, setTheme, systemTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const current = (theme === "system" ? systemTheme : theme) ?? "light";
 
-export const ThemeToggle = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    const isDark = document.documentElement.classList.contains('dark');
-    setIsDarkMode(isDark);
-  }, []);
-
-  const toggleTheme = () => {
-    if (isDarkMode) {
-      document.documentElement.classList.remove('dark');
-    } else {
-      document.documentElement.classList.add('dark');
-    }
-    setIsDarkMode(!isDarkMode);
-  };
+  if (!mounted) return (
+    <button className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-black/10 dark:border-white/10" />
+  );
 
   return (
     <button
-      onClick={toggleTheme}
-      className="px-4 py-2 text-sm font-medium border rounded-full"
+      aria-label="Toggle theme"
+      onClick={() => setTheme(current === "dark" ? "light" : "dark")}
+      className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-black/10 dark:border-white/10 hover:shadow-sm"
     >
-      {isDarkMode ? 'Light' : 'Dark'}
+      {current === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
     </button>
   );
-};
+}

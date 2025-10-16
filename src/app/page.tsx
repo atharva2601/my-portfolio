@@ -1,37 +1,22 @@
-import { Header } from "./components/Header";
-import { Hero } from "./components/Hero";
-import { ExperienceSlider } from "./components/ExperienceSlider";
-import { ProjectsCarousel } from "./components/ProjectsCarousel";
-import { TechStack } from "./components/TechStack";
-import { Contact } from "./components/Contact";
-import { Footer } from "./components/Footer";
-import { ScrollAnimate } from "./components/ScrollAnimate";
+import Header from "./components/Header";
+import Hero from "./components/Hero";
+import ExperienceReel from "./components/ExperienceReel";   // NEW
+import ProjectsShowcase from "./components/ProjectsShowcase"; // NEW
+import TechStack from "./components/TechStack";
+import Contact from "./components/Contact";
+import Footer from "./components/Footer";
 
-export default function Home() {
+export default function Page() {
   return (
-    <main className="bg-white dark:bg-black text-black dark:text-white">
+    <main>
       <Header />
-      
-      <ScrollAnimate>
-        <Hero />
-      </ScrollAnimate>
-
-      <ScrollAnimate>
-        <ExperienceSlider />
-      </ScrollAnimate>
-
-      <ScrollAnimate>
-        <ProjectsCarousel />
-      </ScrollAnimate>
-      
-      <ScrollAnimate>
-        <TechStack />
-      </ScrollAnimate>
-      
-      <ScrollAnimate>
-        <Contact />
-      </ScrollAnimate>
-      
+      <Hero />
+      {/* Experiences: intro video + step-by-step reveal */}
+      <ExperienceReel />
+      {/* Projects: intro video + auto-scrolling gallery */}
+      <ProjectsShowcase />
+      <section id="tech"><TechStack /></section>
+      <section id="contact"><Contact /></section>
       <Footer />
     </main>
   );

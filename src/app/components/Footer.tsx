@@ -1,9 +1,7 @@
-export const Footer = () => {
-  const currentYear = new Date().getFullYear();
-
+export default function Footer(){
   return (
-    <footer className="py-6 px-4 text-center text-sm text-gray-500">
-      <p>&copy; {currentYear} Atharva Patel. All rights reserved. | Built with elegance.</p>
+    <footer className="py-10 text-center text-xs text-neutral-500 dark:text-neutral-400">
+      © {new Date().getFullYear()} Atharva — Built with Next.js & Tailwind
     </footer>
   );
-};
+}

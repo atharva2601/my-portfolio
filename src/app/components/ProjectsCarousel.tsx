@@ -1,57 +1,59 @@
 "use client";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { motion } from "framer-motion";
+import ProjectModal, { type Project } from "./ProjectModal";
+import SectionStage from "./SectionStage";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay } from 'swiper/modules';
-
-import 'swiper/css';
-
-const projects = [
-  { id: '1', title: "Serverless Intelligence", image: "https://images.unsplash.com/photo-1558655146-364adaf1fcc9?q=80&w=400&auto=format&fit=crop" },
-  { id: '2', title: "Unified Design System", image: "https://images.unsplash.com/photo-1541462608143-67571c6738dd?q=80&w=400&auto=format=fit=crop" },
-  { id: '3', title: "Real-Time Analytics", image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=400&auto=format=fit=crop" },
-  { id: '4', title: "Marketplace Revamp", image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=400&auto=format=fit=crop" },
-  { id: '5', title: "Mobile Banking App", image: "https://images.unsplash.com/photo-1576153139585-5a6857422238?q=80&w=400&auto=format=fit=crop" },
-  { id: '6', title: "Cloud Migration", image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=400&auto=format=fit=crop" },
+const base: Project[] = [
+  { name:"AI Patient Adherence",year:"2025",tags:["FastAPI","RabbitMQ","AWS"],image:"/projects/adherence.jpg",description:"HIPAA-compliant adherence system."},
+  { name:"VibeSea Anti-Cheat",year:"2025",tags:["Electron","Next.js","Prisma"],image:"/projects/vibesea.jpg",description:"Screenshot ingest + AI summary."},
+  { name:"Invoice Reconciler",year:"2024",tags:["Django","Airflow","SAP"],image:"/projects/invoice.jpg",description:"Automated 3-way match & payments."},
+  { name:"Resume Agent",year:"2025",tags:["CrewAI","LLM","MCP"],image:"/projects/agent.jpg",description:"Multi-agent resume tailoring."},
+  { name:"WorkshopForge",year:"2025",tags:["K-12","JSON","LLM"],image:"/projects/workshop.jpg",description:"K-12 project builder."},
 ];
 
-export const ProjectsCarousel = () => {
+export default function ProjectsCarousel() {
+  const items = [...base, ...base];
+  const [active, setActive] = useState<Project|null>(null);
+  const [paused, setPaused] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(()=> {
+    let raf=0;
+    const tick=()=>{ const el=trackRef.current;
+      if(el && !paused && !active){ el.scrollLeft += 0.9; if(el.scrollLeft >= el.scrollWidth/2) el.scrollLeft = 0; }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return ()=>cancelAnimationFrame(raf);
+  }, [paused,active]);
+
   return (
-    <section id="work" className="py-20 bg-gray-100 dark:bg-gray-900 overflow-hidden">
-      <div className="max-w-7xl mx-auto text-center">
-        <h2 className="text-4xl font-bold mb-12 text-black dark:text-white">Recent Projects</h2>
+    <SectionStage id="projects" title="Projects" tone="violet">
+      <div onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)} className="overflow-x-hidden pb-2">
+        <div ref={trackRef} className="overflow-x-hidden">
+          <motion.div initial={{opacity:0,y:18}} whileInView={{opacity:1,y:0}} viewport={{once:false,amount:.4}} transition={{duration:.45}} className="flex gap-4 min-w-max">
+            {items.map((p,i)=>(
+              <motion.button key={p.name+i} whileHover={{scale:1.02}} onClick={()=>setActive(p)}
+                className="group relative shrink-0 w-72 sm:w-80 md:w-96 rounded-2xl border border-black/10 dark:border-white/10 bg-white/70 dark:bg-neutral-900/60 text-left hover:shadow-lg transition-shadow">
+                <div className="relative h-44 w-full overflow-hidden rounded-t-2xl">
+                  {p.image ? <Image src={p.image} alt="" fill className="object-cover group-hover:scale-[1.03] transition-transform"/> : <div className="absolute inset-0 bg-neutral-800" />}
+                </div>
+                <div className="p-4">
+                  <div className="text-xs text-neutral-500 dark:text-neutral-400">{p.year}</div>
+                  <div className="text-sm font-semibold">{p.name}</div>
+                  <div className="mt-1 flex flex-wrap gap-1">{p.tags.map(t=>(
+                    <span key={t} className="text-[10px] px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800">{t}</span>
+                  ))}</div>
+                </div>
+              </motion.button>
+            ))}
+          </motion.div>
+        </div>
       </div>
-      <Swiper
-        slidesPerView={'auto'}
-        spaceBetween={30}
-        centeredSlides={true}
-        loop={true}
-        autoplay={{
-          delay: 2500,
-          disableOnInteraction: false,
-        }}
-        modules={[Autoplay]}
-        className="!pb-12" // Add padding to the bottom for spacing
-      >
-        {projects.map((project) => (
-          // Define the size of each slide here
-          <SwiperSlide key={project.id} className="!w-80 !h-96"> 
-            <Link href="#" className="group block rounded-xl overflow-hidden relative w-full h-full">
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                className="object-cover z-0 transition-transform duration-500 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent z-10"></div>
-              <h3 className="relative z-20 p-6 flex flex-col justify-end h-full text-white text-2xl font-bold">
-                {project.title}
-              </h3>
-            </Link>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </section>
+      <p className="mt-3 text-xs text-neutral-500">Cards auto-scroll; hover pauses; click opens details.</p>
+      <ProjectModal project={active} onClose={()=>setActive(null)}/>
+    </SectionStage>
   );
-};
+}
