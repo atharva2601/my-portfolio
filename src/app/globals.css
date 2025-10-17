@@ -16,3 +16,4 @@
   background:linear-gradient(120deg,transparent,rgba(255,255,255,.25),transparent);
   filter:blur(6px); transform:translateX(-120%); animation:sheen 3s linear infinite;
 }
+
