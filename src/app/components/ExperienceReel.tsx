@@ -16,12 +16,12 @@ type Exp = {
 
 const EXPERIENCES: Exp[] = [
   {
-    company: "CVS Health",
-    role: "Backend Python Developer",
+    company: "Aarvicom",
+    role: "Full-Stack",
     time: "2024 — Present",
-    logo: "/logos/cvs.png",
-    video: "/videos/cvs.mp4",
-    poster: "/videos/cvs.jpg",
+    logo: "/logos/aarvicom.jpeg",
+    video: "/videos/Aarvicom.mp4",
+    poster: "/videos/Aarvicom.mp4",
     bullets: [
       "FastAPI microservices on AWS (Lambda/EC2)",
       "RabbitMQ, Twilio; HIPAA-compliant pipelines",
@@ -29,12 +29,12 @@ const EXPERIENCES: Exp[] = [
     ],
   },
   {
-    company: "Hexaware",
-    role: "Software Dev Engineer",
+    company: "SoftVan",
+    role: "Software Engineer",
     time: "2023 — 2024",
-    logo: "/logos/hexaware.png",
-    video: "/videos/hexaware.mp4",
-    poster: "/videos/hexaware.jpg",
+    logo: "/logos/softVan.png",
+    video: "/videos/Softvan.mp4",
+    poster: "/videos/SoftVan.mp4",
     bullets: [
       "Automated invoice reconciliation (Django + Airflow)",
       "SAP PI, Oracle Financials integration",
@@ -42,12 +42,12 @@ const EXPERIENCES: Exp[] = [
     ],
   },
   {
-    company: "VibeSea",
-    role: "Founding Engineer",
+    company: "Version Labs",
+    role: "Software Engineer Intern",
     time: "2025",
-    logo: "/logos/vibesea.png",
-    video: "/videos/vibesea.mp4",
-    poster: "/videos/vibesea.jpg",
+    logo: "/logos/version.png",
+    video: "/videos/version.mp4",
+    poster: "/videos/version.mp4",
     bullets: [
       "Anti-cheat screenshot platform (Electron/Next.js)",
       "Prisma/PostgreSQL, S3 snapshot ingestion",
@@ -68,7 +68,7 @@ export default function ExperienceReel() {
         subtitle="A few highlights from recent roles"
         tone="blue"
         videoSrc="/videos/experience-reel.mp4"   // add file under /public/videos
-        poster="/videos/experience-reel.jpg"
+        poster="/videos/experience-reel.mp4"
       />
 
       {/* Stepper with sticky media */}

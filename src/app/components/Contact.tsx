@@ -20,9 +20,9 @@ export default function Contact(){
           className="p-6 rounded-2xl border border-black/10 dark:border-white/10 bg-white/80 dark:bg-neutral-900/70">
           <p className="text-sm text-neutral-600 dark:text-neutral-300">Prefer email or socials?</p>
           <div className="mt-4 flex flex-col gap-3 text-sm">
-            <a href="mailto:you@example.com" className="inline-flex items-center gap-2 hover:underline"><Mail className="h-4 w-4" /> you@example.com</a>
-            <a href="https://github.com/atharva2601" className="inline-flex items-center gap-2 hover:underline"><Github className="h-4 w-4" /> github.com/atharva2601</a>
-            <a href="https://linkedin.com/in/your-handle" className="inline-flex items-center gap-2 hover:underline"><Linkedin className="h-4 w-4" /> linkedin.com/in/your-handle</a>
+            <a href="mailto:atharvap987@gmail.com" className="inline-flex items-center gap-2 hover:underline"><Mail className="h-4 w-4" /> Mail</a>
+            <a href="https://github.com/atharva2601" className="inline-flex items-center gap-2 hover:underline"><Github className="h-4 w-4" /> Github</a>
+            <a href="https://www.linkedin.com/in/atharva-patel-6abb92200/" className="inline-flex items-center gap-2 hover:underline"><Linkedin className="h-4 w-4" /> Linkedin</a>
           </div>
         </motion.div>
       </div>

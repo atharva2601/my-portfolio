@@ -3,11 +3,16 @@ import { motion } from "framer-motion";
 import SectionStage from "./SectionStage";
 
 const tech = [
-  { name:"React", src:"/logos/react.svg" }, { name:"TypeScript", src:"/logos/typescript.svg" },
-  { name:"Next.js", src:"/logos/next.svg" }, { name:"Tailwind", src:"/logos/tailwind.svg" },
-  { name:"Framer Motion", src:"/logos/framer.svg" }, { name:"Prisma", src:"/logos/prisma.svg" },
-  { name:"PostgreSQL", src:"/logos/postgresql.svg" }, { name:"AWS", src:"/logos/aws.svg" },
-  { name:"Docker", src:"/logos/docker.svg" }, { name:"RabbitMQ", src:"/logos/rabbitmq.svg" },
+  { name:"React", src:"/logos/React.png" }, { name:"Django", src:"/logos/Django.png" },
+  { name:"Flask", src:"/logos/flask.png" }, { name:"Github Actions", src:"/logos/github.png" },
+  { name:"HuggingFace", src:"/logos/HuggingFace.png" }, { name:"Kubernetes", src:"/logos/Kubernetes.png" },
+  { name:"MySQL", src:"/logos/Mysql.png" },
+  { name:"Numpy", src:"/logos/numpy.png" }, { name:"Pandas", src:"/logos/pandas.png" },
+  { name:"PyTorch", src:"/logos/Pytorch.png" }, { name:"TensorFlow", src:"/logos/TensorFlow.png" },
+  { name:"Next.js", src:"/logos/Next.png" }, { name:"JavaScript", src:"/logos/JS.png" },
+  { name:"Python", src:"/logos/Python.png" }, { name:"Node", src:"/logos/Node.png" },
+  { name:"PostgreSQL", src:"/logos/postgre.png" }, { name:"AWS", src:"/logos/AWS.png" },
+  { name:"Docker", src:"/logos/Docker.png" }, { name:"Angular", src:"/logos/angular.png" },
 ];
 
 export default function TechStack(){

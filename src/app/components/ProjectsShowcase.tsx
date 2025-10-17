@@ -6,11 +6,11 @@ import StageIntro from "./StageIntro";
 import ProjectModal, { type Project } from "./ProjectModal";
 
 const BASE: Project[] = [
-  { name:"AI Patient Adherence",year:"2025",tags:["FastAPI","RabbitMQ","AWS"],image:"/projects/adherence.jpg",description:"HIPAA-compliant adherence system."},
-  { name:"VibeSea Anti-Cheat",year:"2025",tags:["Electron","Next.js","Prisma"],image:"/projects/vibesea.jpg",description:"Screenshot ingest + AI summary."},
-  { name:"Invoice Reconciler",year:"2024",tags:["Django","Airflow","SAP"],image:"/projects/invoice.jpg",description:"Automated 3-way match & payments."},
-  { name:"Resume Agent",year:"2025",tags:["CrewAI","LLM","MCP"],image:"/projects/agent.jpg",description:"Multi-agent resume tailoring."},
-  { name:"WorkshopForge",year:"2025",tags:["K-12","JSON","LLM"],image:"/projects/workshop.jpg",description:"K-12 project builder."},
+  { name:"Landslide Prediction",year:"2025",tags:["FastAPI","RabbitMQ","AWS"],image:"/projects/landslide.png",description:"HIPAA-compliant adherence system."},
+  { name:"BookMyTicket",year:"2025",tags:["Electron","Next.js","Prisma"],image:"/projects/BookMyticket.png",description:"Screenshot ingest + AI summary."},
+  { name:"E-voting Database",year:"2024",tags:["Django","Airflow","SAP"],image:"/projects/evoting.png",description:"Automated 3-way match & payments."},
+  { name:"Sentiment Analysis",year:"2025",tags:["CrewAI","LLM","MCP"],image:"/projects/emotion.png",description:"Multi-agent resume tailoring."},
+  { name:"Serverless Architecture",year:"2025",tags:["K-12","JSON","LLM"],image:"/projects/serverless.png",description:"K-12 project builder."},
 ];
 
 export default function ProjectsShowcase() {
@@ -42,7 +42,7 @@ export default function ProjectsShowcase() {
         subtitle="Selected work and experiments"
         tone="violet"
         videoSrc="/videos/projects-reel.mp4"   // add this (or remove prop for gradient fallback)
-        poster="/videos/projects-reel.jpg"
+        poster="/videos/projects-reel.mp4"
       />
 
       {/* Auto-scroll deck */}
