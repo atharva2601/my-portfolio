@@ -14,7 +14,7 @@ const BASE: Project[] = [
   { name:"Serverless Architecture", year:"2025", tags:["K-12","JSON","LLM"],     image:"/projects/serverless.png", description:"K-12 project builder." },
 ];
 
-const SPEED = 230; // px/sec — bump to 360–400 if you want it even faster
+const SPEED = 120; // px/sec — bump to 360–400 if you want it even faster
 
 export default function ProjectsShowcase() {
   // render the base row twice so we can wrap the marquee seamlessly
