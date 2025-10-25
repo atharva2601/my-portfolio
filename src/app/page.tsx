@@ -4,7 +4,7 @@ import ExperienceReel from "./components/ExperienceReel";   // NEW
 import ProjectsShowcase from "./components/ProjectsShowcase"; // NEW
 import TechStack from "./components/TechStack";
 import Contact from "./components/Contact";
-import Footer from "./components/Footer";
+// import Footer from "./components/Footer";
 
 export default function Page() {
   return (
@@ -17,7 +17,7 @@ export default function Page() {
       <ProjectsShowcase />
       <section id="tech"><TechStack /></section>
       <section id="contact"><Contact /></section>
-      <Footer />
+      {/* <Footer /> */}
     </main>
   );
 }

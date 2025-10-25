@@ -1,26 +1,27 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useAnimation, useInView } from "framer-motion";
+import { motion, useAnimation, useInView, type Variants } from "framer-motion";
 import StageIntro from "./StageIntro";
 
-/* =============================
+/* ---------------------------------------------
    Settings (edit these)
-============================= */
+---------------------------------------------- */
 const TO_EMAIL     = "you@example.com";
 const GITHUB_URL   = "https://github.com/yourname";
 const LINKEDIN_URL = "https://www.linkedin.com/in/yourname/";
 
-/* =============================
-   Replay on each scroll visit
-============================= */
+/* ---------------------------------------------
+   Replay on every scroll visit (so it re-animates
+   when you come back up or down the page)
+---------------------------------------------- */
 function ReplayOnView({
   children,
   variants,
   className,
 }: {
   children: React.ReactNode;
-  variants: any;
+  variants: Variants;
   className?: string;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -39,29 +40,29 @@ function ReplayOnView({
   );
 }
 
-/* =============================
-   Anim variants
-============================= */
-const parentStagger = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
+/* ---------------------------------------------
+   Animation variants
+---------------------------------------------- */
+const parentStagger: Variants = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
 
-const slideUp = {
+const slideUp: Variants = {
   hidden: { y: 40, opacity: 0 },
   show:   { y: 0,  opacity: 1, transition: { type: "spring", stiffness: 380, damping: 26 } },
 };
 
-const slideLeft = {
+const slideLeft: Variants = {
   hidden: { x: 50, opacity: 0 },
   show:   { x: 0,  opacity: 1, transition: { type: "spring", stiffness: 380, damping: 28 } },
 };
 
-const slideRight = {
+const slideRight: Variants = {
   hidden: { x: -50, opacity: 0 },
   show:   { x: 0,   opacity: 1, transition: { type: "spring", stiffness: 380, damping: 28 } },
 };
 
-/* =============================
-   Mailto handler
-============================= */
+/* ---------------------------------------------
+   Simple mailto handler (no backend)
+---------------------------------------------- */
 function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
   e.preventDefault();
   const fd = new FormData(e.currentTarget);
@@ -75,16 +76,18 @@ function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
   window.location.href = mailto;
 }
 
-/* =============================
-   Particles BG (now visible)
-   - sits at z-0 (not negative)
-   - gradient fallback layer
-============================= */
-function ParticlesBG() {
+/* ---------------------------------------------
+   Animated particles background
+   (z-0 so it sits ABOVE the section bg but
+   BELOW the content which is z-10)
+---------------------------------------------- */
+function ContactBG() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current!;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
@@ -93,17 +96,16 @@ function ParticlesBG() {
     let w = 0, h = 0, dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
     const palette = ["#22d3ee", "#34d399", "#fbbf24", "#a78bfa", "#f472b6"];
     const MAX_DIST = 120;
-    const prefersReduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
 
     function resize() {
       const rect = canvas.getBoundingClientRect();
-      w = Math.max(1, Math.floor(rect.width));
-      h = Math.max(1, Math.floor(rect.height));
+      w = Math.floor(rect.width);
+      h = Math.floor(rect.height);
       canvas.width = Math.floor(w * dpr);
       canvas.height = Math.floor(h * dpr);
-      (ctx as CanvasRenderingContext2D).setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.min(120, Math.round((w * h) / 15000));
+      const count = Math.round((w * h) / 15000); // density
       particles = new Array(count).fill(0).map(() => {
         const speed = 0.2 + Math.random() * 0.6;
         const angle = Math.random() * Math.PI * 2;
@@ -121,14 +123,14 @@ function ParticlesBG() {
     function tick() {
       ctx.clearRect(0, 0, w, h);
 
-      // vignette to make dots pop
+      // soft vignette
       const grd = ctx.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, Math.max(w, h) * 0.6);
       grd.addColorStop(0, "rgba(0,0,0,0)");
       grd.addColorStop(1, "rgba(0,0,0,0.35)");
       ctx.fillStyle = grd;
       ctx.fillRect(0, 0, w, h);
 
-      // particles
+      // dots
       ctx.globalCompositeOperation = "lighter";
       for (const p of particles) {
         p.x += p.vx;
@@ -162,61 +164,35 @@ function ParticlesBG() {
         }
       }
       ctx.globalCompositeOperation = "source-over";
+
       raf = requestAnimationFrame(tick);
     }
 
-    function start() {
+    const ro = new ResizeObserver(() => {
       resize();
-      if (!prefersReduced) raf = requestAnimationFrame(tick);
-      else {
-        ctx.clearRect(0, 0, w, h);
-        particles.forEach((p) => {
-          ctx.beginPath();
-          ctx.fillStyle = p.c;
-          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fill();
-        });
-      }
-    }
-
-    const ro = new ResizeObserver(start);
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(tick);
+    });
     ro.observe(canvas);
-
-    const vis = () => {
-      if (document.hidden) cancelAnimationFrame(raf);
-      else if (!prefersReduced) raf = requestAnimationFrame(tick);
-    };
-    document.addEventListener("visibilitychange", vis);
 
     return () => {
       ro.disconnect();
       cancelAnimationFrame(raf);
-      document.removeEventListener("visibilitychange", vis);
     };
   }, []);
 
   return (
-    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-      {/* visible gradient fallback under the canvas */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage:
-            "radial-gradient(700px 700px at 12% 18%, rgba(16,185,129,0.22), transparent 60%)," +
-            "radial-gradient(600px 600px at 85% 14%, rgba(14,165,233,0.18), transparent 60%)," +
-            "radial-gradient(800px 800px at 50% 88%, rgba(236,72,153,0.16), transparent 60%)",
-          backgroundRepeat: "no-repeat",
-          filter: "saturate(1.1)",
-        }}
-      />
-      <canvas ref={canvasRef} className="h-full w-full" />
+    <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+      {/* subtle color wash so dots feel integrated */}
+      <div className="absolute inset-0 opacity-100 bg-[radial-gradient(120%_120%_at_10%_10%,rgba(16,185,129,.12),transparent_55%),radial-gradient(120%_120%_at_90%_0%,rgba(59,130,246,.10),transparent_60%),radial-gradient(160%_140%_at_50%_120%,rgba(236,72,153,.10),transparent_60%)]" />
+      <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
     </div>
   );
 }
 
-/* =============================
+/* ---------------------------------------------
    Icon button (logos only)
-============================= */
+---------------------------------------------- */
 function IconButton({
   href,
   label,
@@ -235,7 +211,6 @@ function IconButton({
       href={href}
       aria-label={label}
       target="_blank"
-      rel="noreferrer"
       className="grid h-11 w-11 place-items-center rounded-full bg-white/8 ring-1 ring-white/10 hover:bg-white/12 hover:ring-white/20 active:scale-[.98] transition"
     >
       {children}
@@ -243,13 +218,13 @@ function IconButton({
   );
 }
 
-/* =============================
-   Component
-============================= */
+/* ---------------------------------------------
+   MAIN
+---------------------------------------------- */
 export default function Contact() {
   return (
-    <div id="contact">
-      {/* Reel hero */}
+    <>
+      {/* Contact reel (your video hero) */}
       <StageIntro
         id="contact-intro"
         title="Contact Me"
@@ -259,12 +234,12 @@ export default function Contact() {
         poster="/videos/contact-reel.mp4"
       />
 
-      {/* Section with **visible** animated dots background */}
-      <section className="relative bg-neutral-950 pt-16 md:pt-24 pb-24">
-        {/* Put BG at z-0 and the content wrapper at z-10 */}
-        <ParticlesBG />
+      {/* Animated contact section (background + content + footer) */}
+      <section id="contact" className="relative overflow-hidden bg-neutral-950">
+        <ContactBG />
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* content sits above background */}
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 md:pt-20 pb-8">
           <div className="grid gap-6 lg:grid-cols-2">
             {/* Form */}
             <ReplayOnView variants={parentStagger} className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur p-6">
@@ -286,7 +261,7 @@ export default function Contact() {
                 <motion.div variants={slideUp}>
                   <label className="sr-only" htmlFor="message">Message</label>
                   <textarea
-                    id="message" name="message" placeholder="Message" rows={6}
+                    id="message" name="message" placeholder="Message" rows={8}
                     className="w-full resize-none rounded-lg border border-white/10 bg-black/40 px-3 py-2 outline-none focus:ring-2 focus:ring-amber-400/50"
                   />
                 </motion.div>
@@ -338,10 +313,14 @@ export default function Contact() {
             </ReplayOnView>
           </div>
         </div>
-      </section>
 
-      {/* breathing room before footer */}
-      <div className="h-24 md:h-32 lg:h-40 bg-neutral-950" />
-    </div>
+        {/* Footer INSIDE the animated section */}
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-8">
+          <p className="text-center text-xs text-white/60">
+            © Atharva Patel
+          </p>
+        </div>
+      </section>
+    </>
   );
 }
