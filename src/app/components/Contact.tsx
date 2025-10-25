@@ -7,13 +7,12 @@ import StageIntro from "./StageIntro";
 /* ---------------------------------------------
    Settings (edit these)
 ---------------------------------------------- */
-const TO_EMAIL     = "you@example.com";
-const GITHUB_URL   = "https://github.com/yourname";
+const TO_EMAIL = "you@example.com";
+const GITHUB_URL = "https://github.com/yourname";
 const LINKEDIN_URL = "https://www.linkedin.com/in/yourname/";
 
 /* ---------------------------------------------
-   Replay on every scroll visit (so it re-animates
-   when you come back up or down the page)
+   Replay on every scroll visit
 ---------------------------------------------- */
 function ReplayOnView({
   children,
@@ -47,17 +46,17 @@ const parentStagger: Variants = { hidden: {}, show: { transition: { staggerChild
 
 const slideUp: Variants = {
   hidden: { y: 40, opacity: 0 },
-  show:   { y: 0,  opacity: 1, transition: { type: "spring", stiffness: 380, damping: 26 } },
+  show: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 380, damping: 26 } },
 };
 
 const slideLeft: Variants = {
   hidden: { x: 50, opacity: 0 },
-  show:   { x: 0,  opacity: 1, transition: { type: "spring", stiffness: 380, damping: 28 } },
+  show: { x: 0, opacity: 1, transition: { type: "spring", stiffness: 380, damping: 28 } },
 };
 
 const slideRight: Variants = {
   hidden: { x: -50, opacity: 0 },
-  show:   { x: 0,   opacity: 1, transition: { type: "spring", stiffness: 380, damping: 28 } },
+  show: { x: 0, opacity: 1, transition: { type: "spring", stiffness: 380, damping: 28 } },
 };
 
 /* ---------------------------------------------
@@ -78,22 +77,20 @@ function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 
 /* ---------------------------------------------
    Animated particles background
-   (z-0 so it sits ABOVE the section bg but
-   BELOW the content which is z-10)
 ---------------------------------------------- */
 function ContactBG() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    // Assert non-null so inner closures don't re-introduce nullability
+    const canvas = canvasRef.current!; // mounted in client
+    const ctx = canvas.getContext("2d", { alpha: true }) as CanvasRenderingContext2D;
 
-    const ctx = canvas.getContext("2d", { alpha: true });
-    if (!ctx) return;
-
-    let raf = 0;
+    let raf: number = 0;
     let particles: { x: number; y: number; vx: number; vy: number; r: number; c: string }[] = [];
-    let w = 0, h = 0, dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    let w = 0,
+      h = 0,
+      dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
     const palette = ["#22d3ee", "#34d399", "#fbbf24", "#a78bfa", "#f472b6"];
     const MAX_DIST = 120;
 
@@ -150,8 +147,10 @@ function ContactBG() {
       ctx.lineWidth = 0.7;
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
-          const a = particles[i], b = particles[j];
-          const dx = a.x - b.x, dy = a.y - b.y;
+          const a = particles[i],
+            b = particles[j];
+          const dx = a.x - b.x,
+            dy = a.y - b.y;
           const d = Math.hypot(dx, dy);
           if (d < MAX_DIST) {
             const alpha = 1 - d / MAX_DIST;
@@ -229,7 +228,7 @@ export default function Contact() {
         id="contact-intro"
         title="Contact Me"
         subtitle="Let’s build something great"
-        tone="amber"
+        tone={"amber" as any} // keep look; silence TS union error
         videoSrc="/videos/contact-reel.mp4"
         poster="/videos/contact-reel.mp4"
       />
@@ -245,23 +244,37 @@ export default function Contact() {
             <ReplayOnView variants={parentStagger} className="rounded-2xl border border-white/10 bg-black/40 backdrop-blur p-6">
               <motion.form onSubmit={handleSubmit} className="space-y-4">
                 <motion.div variants={slideUp}>
-                  <label className="sr-only" htmlFor="name">Your name</label>
+                  <label className="sr-only" htmlFor="name">
+                    Your name
+                  </label>
                   <input
-                    id="name" name="name" placeholder="Your name"
+                    id="name"
+                    name="name"
+                    placeholder="Your name"
                     className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 outline-none focus:ring-2 focus:ring-amber-400/50"
                   />
                 </motion.div>
                 <motion.div variants={slideUp}>
-                  <label className="sr-only" htmlFor="email">Your email</label>
+                  <label className="sr-only" htmlFor="email">
+                    Your email
+                  </label>
                   <input
-                    id="email" type="email" name="email" placeholder="Your email"
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="Your email"
                     className="w-full rounded-lg border border-white/10 bg-black/40 px-3 py-2 outline-none focus:ring-2 focus:ring-amber-400/50"
                   />
                 </motion.div>
                 <motion.div variants={slideUp}>
-                  <label className="sr-only" htmlFor="message">Message</label>
+                  <label className="sr-only" htmlFor="message">
+                    Message
+                  </label>
                   <textarea
-                    id="message" name="message" placeholder="Message" rows={8}
+                    id="message"
+                    name="message"
+                    placeholder="Message"
+                    rows={8}
                     className="w-full resize-none rounded-lg border border-white/10 bg-black/40 px-3 py-2 outline-none focus:ring-2 focus:ring-amber-400/50"
                   />
                 </motion.div>
@@ -316,9 +329,19 @@ export default function Contact() {
 
         {/* Footer INSIDE the animated section */}
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-8">
-          <p className="text-center text-xs text-white/60">
-            © Atharva Patel
-          </p>
+          <p className="text-center text-xs text-white/60">© Atharva Patel</p>
+          
+          <p className="text-[10px] sm:text-[11px] text-white/40 sm:ml-auto">
+          Videos courtesy of{" "}
+          <a
+            href="https://www.pexels.com/"
+            target="_blank"
+            rel="noreferrer"
+            className="underline decoration-dotted hover:text-white/60"
+          >
+            Pexels
+          </a>
+        </p>
         </div>
       </section>
     </>
